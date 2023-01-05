@@ -1,0 +1,18 @@
+owner: techlead-operacoes
+tribe: finaceiro-fiscal
+vertical: backoffice-lojas-ops
+application:
+  description: "Exemplo de aplicação com spring-boot 3.0 e graalvm."
+  name: "example-native"
+  languages: "Java"
+  fortify_id: exemplo-native
+security:
+  url_homolog: "https://exemplo-rabbit-native-stage.magazineluiza.com.br"
+  url_prod: "https://exemplo-rabbit-native-sa.magazineluiza.com.br"
+  businessRisk: "Medium"
+  public: "Internal"
+  accessibility: "Yes"
+  waf: "No"
+  qradar: "No"
+  authentication: "Caduser"
+  administration: "Not apply"

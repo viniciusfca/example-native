@@ -1,0 +1,162 @@
+variables:
+  MAVEN_IMAGE: maven:3.6.3-jdk-1
+
+stages:
+  - test
+  - sonar
+  - fortify
+  - build
+  - gmud
+  - deploy
+  - rollback
+
+
+tests:
+  stage: test
+  image: $MAVEN_IMAGE
+  script:
+    - mvn test verify jacoco:report
+    - cat target/site/jacoco/index.html
+  coverage: "/Total.*?([0-9]{1,3})%/"
+  artifacts:
+    paths:
+      - target/site/jacoco
+    expire_in: 7 days
+  only:
+    - branches
+    - tags
+    - merge_requests
+
+sonar_stage:
+  stage: sonar
+  image: $CIKNIFE_IMAGE
+  script:
+    - export SONAR_URL=$STAGE_SONAR_URL
+    - export SONAR_TOKEN=$STAGE_SONAR_TOKEN
+    - ci-knife sonar-scanner
+  variables:
+    SONAR_ANALYSIS_MODE: publish
+  dependencies:
+    - tests
+  only:
+    - branches
+  except:
+    - master
+    - tags  
+
+sonar_production:
+  stage: sonar
+  image: $CIKNIFE_IMAGE
+  script:
+    - ci-knife sonar-scanner
+  variables:
+    SONAR_ANALYSIS_MODE: publish
+  dependencies:
+    - tests
+  only:
+    - tags
+
+fortify:
+  stage: fortify
+  image: $CIKNIFE_IMAGE
+  script:
+    - ci-knife security-scanner
+  only:
+    - master
+  except:
+    - schedules
+
+build:
+  stage: build
+  before_script:
+    - apt-get update && apt-get install -y zlib1g-dev && apt-get install -y wget && apt-get install -y build-essential && apt-get install -y curl && apt-get install -y zip
+  script:
+    - curl -s "https://get.sdkman.io" | bash
+    - source "$HOME/.sdkman/bin/sdkman-init.sh"
+    - sdk install java 22.3.r17-nik
+    - gu install native-image
+    - ${CI_PROJECT_DIR}./mvnw -version
+    - ${CI_PROJECT_DIR}./mvnw -Pnative native:compile -DskipTests
+  artifacts:
+    paths:
+      - target/exemplo-native
+  only:
+    - branches
+    - tags
+  except:
+    - schedules
+
+##########################
+# Deploy staging jobs    #
+##########################
+deploy-staging-argo:
+  stage: deploy
+  image: $CIKNIFE_IMAGE
+  variables:
+    ARGOCD_SERVER: $HML_ARGOCD_SERVER
+    ARGOCD_AUTH_TOKEN: $HML_ARGOCD_AUTH_TOKEN
+    DEPLOYMENT_BRANCH: ${DEPLOYMENT_REPO_BRANCH_STAGING}
+    DEPLOYMENT_DIRECTORY: ${DEPLOYMENT_PROJECT}
+    DEPLOY_TAG: ${CI_COMMIT_SHORT_SHA}
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - docker:19.03-dind
+  script:
+    - ci-knife argocd-deploy --apps ${DEPLOYMENT_PROJECT} --namespace ${DEPLOYMENT_NAMESPACE} --branch ${DEPLOYMENT_REPO_BRANCH_STAGING} --docker-image --no-msg
+  allow_failure: true
+  only:
+    - branches
+  except:
+    - master
+    - tags
+
+##########################
+# Deploy production jobs #
+##########################
+create_release:
+  stage: tag
+  image: $CIKNIFE_IMAGE
+  script: ci-knife create-release -d -s -w
+  allow_failure: false
+  only:
+    - master
+  except:
+    changes:
+      - CHANGELOG.md
+      - pom.xml
+  when: manual
+
+create_gmud:
+  stage: gmud
+  image: $CIKNIFE_IMAGE
+  script: ci-knife create-gmud --no-msg
+  allow_failure: false
+  only:
+    - tags
+  when: manual
+
+deploy-production-argo:
+  stage: deploy
+  image: $CIKNIFE_IMAGE
+  services:
+    - docker:18.09-dind
+  script:
+    - ci-knife argocd-deploy --apps ${DEPLOYMENT_PROJECT} --namespace ${DEPLOYMENT_NAMESPACE} --branch ${DEPLOYMENT_REPO_BRANCH_PROD} --docker-image
+  allow_failure: true
+  only:
+    - tags
+  when: manual
+
+rollback-production-argo:
+  stage: rollback
+  image: $CIKNIFE_IMAGE
+  services:
+    - docker:18.09-dind
+  script: ci-knife argocd-rollback
+  allow_failure: false
+  only:
+    - tags
+  when: manual
+  dependencies:
+    - deploy-production-argo
