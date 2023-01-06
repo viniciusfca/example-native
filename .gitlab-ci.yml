@@ -68,7 +68,7 @@ build:
     - tar -xf ${CI_PROJECT_DIR}/example-native.tar.xz
   artifacts:
     paths:
-      - example-native
+      - target/example-native
   only:
     - branches
     - tags
