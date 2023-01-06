@@ -1,6 +1,6 @@
-FROM ubuntu:lunar-20221216
+FROM debian:stretch-slim
 RUN mkdir /app/
 ADD . /app
 WORKDIR /app
-COPY exemplo-native /app
-CMD ["./exemplo-native"]
+COPY exemple-native /app
+CMD ["./exemple-native"]
