@@ -1,4 +1,4 @@
-FROM alpine:3.17.0
+FROM ubuntu:lunar-20221216
 RUN mkdir /app/
 ADD . /app
 WORKDIR /app
