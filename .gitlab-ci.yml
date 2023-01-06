@@ -69,12 +69,8 @@ fortify:
 
 build:
   stage: build
-  before_script:
-    - apt-get update && apt-get install -y zlib1g-dev && apt-get install -y wget && apt-get install -y build-essential && apt-get install -y curl && apt-get install -y zip
+  image: "gcr.io/magalu-cicd/graalvm-build-image:90ab69fa"
   script:
-    - curl -s "https://get.sdkman.io" | bash
-    - source "$HOME/.sdkman/bin/sdkman-init.sh"
-    - sdk install java 22.3.r17-nik
     - java -version
     - ${CI_PROJECT_DIR}/mvnw -version
     - ${CI_PROJECT_DIR}/mvnw -Pnative native:compile -DskipTests
