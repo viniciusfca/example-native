@@ -76,8 +76,8 @@ build:
     - source "$HOME/.sdkman/bin/sdkman-init.sh"
     - sdk install java 22.3.r17-nik
     - java -version
-    - .${CI_PROJECT_DIR}/mvnw -version
-    - .${CI_PROJECT_DIR}/mvnw -Pnative native:compile -DskipTests
+    - ${CI_PROJECT_DIR}/mvnw -version
+    - ${CI_PROJECT_DIR}/mvnw -Pnative native:compile -DskipTests
   artifacts:
     paths:
       - target/exemplo-native
