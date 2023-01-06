@@ -65,7 +65,7 @@ build:
   before_script:
     - apt-get update && apt-get install -y zip
   script:
-    - tar -xf example-native.tar.xzs
+    - tar -xf ${CI_PROJECT_DIR}/example-native.tar.xzs
   artifacts:
     paths:
       - exemplo-native
