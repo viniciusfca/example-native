@@ -62,7 +62,7 @@ fortify:
 
 build:
   stage: build
-  image: "springci/graalvm-ce:java17-0.12.x"
+  image: "findepi/graalvm:java17-all"
   script:
     - java -version
     - ${CI_PROJECT_DIR}/mvnw -version
