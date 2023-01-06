@@ -69,7 +69,7 @@ fortify:
 
 build:
   stage: build
-  image: "gcr.io/magalu-cicd/graalvm-build-image:90ab69fa"
+  image: "gcr.io/magalu-cicd/graalvm-build-image:f496e1f1"
   script:
     - java -version
     - ${CI_PROJECT_DIR}/mvnw -version
