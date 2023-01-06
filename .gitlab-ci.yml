@@ -1,5 +1,5 @@
 variables:
-  MAVEN_IMAGE: maven:3.6.3-jdk-1
+  MAVEN_IMAGE: eclipse-temurin:17-jdk
 
 stages:
   - test
