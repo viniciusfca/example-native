@@ -63,7 +63,7 @@ fortify:
 build:
   stage: build
   before_script:
-    - apt-get update && apt-get install -y zip
+    - apt-get update && apt-get install -y zip && apt-get install xz-utils -y
   script:
     - tar -xf ${CI_PROJECT_DIR}/example-native.tar.xz
   artifacts:
