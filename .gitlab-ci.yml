@@ -24,9 +24,7 @@ tests:
       - target/site/jacoco
     expire_in: 7 days
   only:
-    - branches
     - tags
-    - merge_requests
 
 sonar_stage:
   stage: sonar
@@ -40,10 +38,7 @@ sonar_stage:
   dependencies:
     - tests
   only:
-    - branches
-  except:
-    - master
-    - tags  
+    - tags 
 
 sonar_production:
   stage: sonar
@@ -69,7 +64,7 @@ fortify:
 
 build:
   stage: build
-  image: "gcr.io/magalu-cicd/graalvm-build-image:f496e1f1"
+  image: "springci/graalvm-ce:java17-0.12.x"
   script:
     - java -version
     - ${CI_PROJECT_DIR}/mvnw -version
