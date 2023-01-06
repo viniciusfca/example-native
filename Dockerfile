@@ -1,6 +1,6 @@
-FROM openjdk:17.0.1-jdk-slim
+FROM alpine:3.17.0
 RUN mkdir /app/
 ADD . /app
 WORKDIR /app
-COPY target/exemplo-rabbit /app
+COPY exemplo-native /app
 CMD ["./exemplo-native"]

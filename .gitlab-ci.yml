@@ -62,14 +62,16 @@ fortify:
 
 build:
   stage: build
-  image: "findepi/graalvm:java17-all"
+  before_script:
+    - apt-get update && apt-get install -y zip
+    - tar xzvf example-native.tar.xz
   script:
     - java -version
     - ${CI_PROJECT_DIR}/mvnw -version
     - ${CI_PROJECT_DIR}/mvnw -Pnative native:compile -DskipTests
   artifacts:
     paths:
-      - target/exemplo-native
+      - exemplo-native
   only:
     - branches
     - tags
