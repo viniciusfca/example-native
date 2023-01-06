@@ -14,7 +14,7 @@ tests:
   stage: test
   image: $MAVEN_IMAGE
   script:
-    - mvn test verify jacoco:report
+    - ${CI_PROJECT_DIR}./mvnw test verify jacoco:report
     - cat target/site/jacoco/index.html
   coverage: "/Total.*?([0-9]{1,3})%/"
   artifacts:
