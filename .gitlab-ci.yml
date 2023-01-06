@@ -6,7 +6,6 @@ stages:
   - sonar
   - fortify
   - build
-  - gmud
   - deploy
   - rollback
 
@@ -114,27 +113,6 @@ deploy-staging-argo:
 ##########################
 # Deploy production jobs #
 ##########################
-create_release:
-  stage: tag
-  image: $CIKNIFE_IMAGE
-  script: ci-knife create-release -d -s -w
-  allow_failure: false
-  only:
-    - master
-  except:
-    changes:
-      - CHANGELOG.md
-      - pom.xml
-  when: manual
-
-create_gmud:
-  stage: gmud
-  image: $CIKNIFE_IMAGE
-  script: ci-knife create-gmud --no-msg
-  allow_failure: false
-  only:
-    - tags
-  when: manual
 
 deploy-production-argo:
   stage: deploy

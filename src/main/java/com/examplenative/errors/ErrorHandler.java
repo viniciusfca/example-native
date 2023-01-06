@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.examplenative.util.SerializerError;
 
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
@@ -40,6 +41,12 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(value = {ErrorAuthorization.class})
 	public ResponseEntity<ErrorMessage> notAuthorizationError(ErrorAuthorization e, HttpServletRequest request, WebRequest webRequest){
+		logger.error(SerializerError.serializerErrorBody(request, webRequest, e.getMessage()));
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(generateMessageError(e.getMessage(), e.getLocalizedMessage()));
+	}
+	
+	@ExceptionHandler(value = {MalformedJwtException.class})
+	public ResponseEntity<ErrorMessage> malformedJwtError(MalformedJwtException e, HttpServletRequest request, WebRequest webRequest){
 		logger.error(SerializerError.serializerErrorBody(request, webRequest, e.getMessage()));
 		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(generateMessageError(e.getMessage(), e.getLocalizedMessage()));
 	}

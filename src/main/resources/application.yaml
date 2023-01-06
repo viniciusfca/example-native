@@ -4,7 +4,7 @@ spring:
     port: ${REDIS_PORT:6379}
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
-    virtual-host: ${RABBITMQ_VHOST:vhost}
+    virtual-host: ${RABBITMQ_VHOST:teste_performance}
     port: ${RABBITMQ_PORT:5672}
     username: ${RABBITMQ_USERNAME:rabbit}
     password: ${RABBITMQ_PASSWORD:123456}
@@ -27,12 +27,21 @@ spring:
 
 server:
   port : ${PORT:8080}
+  
+jwt:
+  secret: ${JWT_SECRET:teste}
+  
+
+rabbit:
+  exchange: ${RABBITMQ_EXCHANGE:teste}
+  routing-key: ${RABBITMQ_KEY:teste_key}
+  queue: ${RABBITMQ_QUEUE:teste_performance_queue}
 
 
   jpa:
-     show-sql: ${SHOW_SQL:false}
+     show-sql: ${SHOW_SQL:true}
      hibernate:
-        ddl-auto: ${DDL_AUTO:update}
+        ddl-auto: update
      properties:
         hibernate:
            dialect: org.hibernate.dialect.MySQLDialect

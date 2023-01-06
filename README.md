@@ -13,7 +13,7 @@ No projeto vamos usar as seguintes tecnologias:
 - [Spring Boot 3.0.1](https://spring.io/projects/spring-boot)
 - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [Redis](https://redis.io/)
-- [RabbitMQ](https://www.rabbitmq.com/)
+- [RABBITMQMQ](https://www.RABBITMQmq.com/)
 - [Mysql 8](https://www.mysql.com/)
 - [GraalVM](https://www.graalvm.org/java/)
 - [SDKMan](https://sdkman.io/)
@@ -45,11 +45,15 @@ DATABASE_PASS|Senha de banco de dados|root
 LOGGING_LEVEL|Nível de severidade logs que devem ser apresentados no console. Veja os [possíveis valores](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)|info
 REDIS_HOST|Host do Redis.|locahost
 REDIS_PORT|Porta do Redis.|6379
-RABBIT_HOST|Host do RabbitMQ|localhost
-RABBIT_PORT|Porta do RabbitMQ|5672
-RABBIT_USER|User RabbitMQ
-RABBIT_PASSWORD|Senha RabbitMQ
-RABBIT_VHOST|Vhost RabbitMQ| r2d2-rabbit-stage
+RABBITMQ_HOST|Host do RABBITMQlocalhost
+RABBITMQ_PORT|Porta do RABBITMQ|5672
+RABBITMQ_USER|User RABBITMQ
+RABBITMQ_PASSWORD|Senha RABBITMQ
+RABBITMQ_VHOST|Vhost RABBITMQ| teste_performance
+RABBITMQ_EXCHANGE|Exchange RABBITMQ| teste_key
+RABBITMQ_QUEUE|Queue RABBITMQ| teste_performance_queue
+JWT_SECRET|JWT Secret| teste
+
 
 ### Executar
 ```sh

@@ -1,5 +1,6 @@
 package com.examplenative.business;
 
+import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.HashMap;
 
@@ -18,8 +19,6 @@ import com.examplenative.model.CepCache;
 import com.examplenative.repository.CepCacheRepository;
 import com.examplenative.repository.CepRepository;
 import com.examplenative.util.HttpClientUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
@@ -28,14 +27,14 @@ public class CepBusiness {
 	private HttpClientUtils httpUtil;
 	private CepRepository cepRepository;
 	private CepCacheRepository cacheRepository;
+	private RabbitMQBusiness rabbitMQBusiness;
 
 	@Autowired
 	private ModelMapper modelMapper;
 
 	private String url = "https://viacep.com.br/ws/%s/json/";
 
-
-	public ResponseEntity<CepDTO> findByCep(String cep) throws JsonMappingException, JsonProcessingException {
+	public ResponseEntity<CepDTO> findByCep(String cep) throws IOException {
 
 		HttpResponse<String> response = null;
 		var objectMapper = new ObjectMapper();
@@ -46,11 +45,11 @@ public class CepBusiness {
 			return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(cepCache, CepDTO.class));
 
 		} else {
-			
+
 			var cepOpt = cepRepository.findByCep(cep);
-			
+
 			if (cepOpt.isPresent()) {
-				
+
 				cepCache = modelMapper.map(cepOpt.get(), CepCache.class);
 				cepCache.setTtl(1L);
 
@@ -58,7 +57,7 @@ public class CepBusiness {
 				return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(cepOpt.get(), CepDTO.class));
 
 			}
-			
+
 			response = httpUtil.restCall(String.format(url, cep), "", "", "", HttpMethod.GET);
 
 			if (response != null && response.statusCode() == 200) {
@@ -69,23 +68,26 @@ public class CepBusiness {
 					throw new ErrorNotFound(String.format("Não foi possível encontrar o CEP %s", cep));
 				} else {
 
-					var cepModel = objectMapper.readValue(response.body(), Cep.class);
-
-					cepModel.setCep(cepModel.cep.replace("-", ""));
-					cepModel = cepRepository.save(cepModel);
+					var cepDTO = objectMapper.readValue(response.body(), CepDTO.class);
+					cepDTO.setCep(cepDTO.getCep().replace("-", ""));
+					rabbitMQBusiness.send(cepDTO);
 					
-					cepCache = modelMapper.map(cepModel, CepCache.class);
-					cepCache.setTtl(1L);
-
-					cacheRepository.save(cepCache);
-
-					return ResponseEntity.status(HttpStatus.OK).body(modelMapper.map(cepModel, CepDTO.class));
+					return ResponseEntity.status(HttpStatus.OK).body(cepDTO);
 				}
 			} else {
 				throw new ErrorBusiness("O cep %s é inválido");
 			}
 		}
 
+	}
+
+	public void saveCep(Cep cep) {
+		cepRepository.save(cep);
+
+		var cepCache = modelMapper.map(cep, CepCache.class);
+		cepCache.setTtl(1L);
+
+		cacheRepository.save(cepCache);
 	}
 
 	@Autowired
@@ -102,5 +104,12 @@ public class CepBusiness {
 	public void setCacheRepository(CepCacheRepository cacheRepository) {
 		this.cacheRepository = cacheRepository;
 	}
+
+	@Autowired
+	public void setRabbitMQBusiness(RabbitMQBusiness rabbitMQBusiness) {
+		this.rabbitMQBusiness = rabbitMQBusiness;
+	}
+	
+	
 
 }
