@@ -64,7 +64,7 @@ build:
   stage: build
   before_script:
     - apt-get update && apt-get install -y zip
-    - tar xzvf example-native.tar.xz
+    - tar -xf example-native.tar.xz
   script:
     - java -version
     - ${CI_PROJECT_DIR}/mvnw -version
