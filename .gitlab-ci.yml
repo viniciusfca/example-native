@@ -64,11 +64,8 @@ build:
   stage: build
   before_script:
     - apt-get update && apt-get install -y zip
-    - tar -xf example-native.tar.xz
   script:
-    - java -version
-    - ${CI_PROJECT_DIR}/mvnw -version
-    - ${CI_PROJECT_DIR}/mvnw -Pnative native:compile -DskipTests
+    - tar -xf example-native.tar.xzs
   artifacts:
     paths:
       - exemplo-native
