@@ -58,9 +58,7 @@ fortify:
   script:
     - ci-knife security-scanner
   only:
-    - master
-  except:
-    - schedules
+    - tags
 
 build:
   stage: build
@@ -99,9 +97,6 @@ deploy-staging-argo:
   allow_failure: true
   only:
     - branches
-  except:
-    - master
-    - tags
 
 ##########################
 # Deploy production jobs #
