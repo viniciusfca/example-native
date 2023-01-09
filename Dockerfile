@@ -1,5 +1,5 @@
 FROM debian:rc-buggy-20221219
-RUN echo 'deb http://ftp.debian.org/debian stretch-backports main' | tee /etc/apt/sources.list.d/stretch-backports.list
+RUN echo 'deb http://deb.debian.org/debian bullseye-backports main' | tee /etc/apt/sources.list.d/
 RUN apt-get update
 RUN apt-get install -y build-essential && apt-get install -y zip && apt-get install wget -y
 RUN wget https://download.savannah.gnu.org/releases/freetype/freetype-2.12.1.tar.gz && tar xvfz freetype-2.12.1.tar.gz && cd freetype-2.12.1 && ./configure --prefix=/usr/local/freetype/2_12_1 --enable-freetype-config && make && make install
