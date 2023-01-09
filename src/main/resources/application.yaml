@@ -1,7 +1,4 @@
 spring:
-  redis:
-    host: ${REDIS_HOST:example-native-redishot.example-native.svc.cluster.local}
-    port: ${REDIS_PORT:6379}
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     virtual-host: ${RABBITMQ_VHOST:teste_performance}
@@ -31,7 +28,10 @@ server:
 jwt:
   secret: ${JWT_SECRET:teste}
   
-
+redis:
+  host: ${REDIS_HOST:localhost}
+  port: ${REDIS_PORT:6379}
+  
 rabbit:
   exchange: ${RABBITMQ_EXCHANGE:teste}
   routing-key: ${RABBITMQ_KEY:teste_key}
