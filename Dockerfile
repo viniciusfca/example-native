@@ -1,4 +1,4 @@
-FROM buildpack-deps:23.04
+FROM ubuntu:22.04
 ENV LD_LIBRARY_PATH=/usr/lib/x86_64-linux-gnu
 RUN mkdir /app/
 ADD . /app
