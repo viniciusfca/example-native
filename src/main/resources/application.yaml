@@ -15,9 +15,19 @@ spring:
      username: '${DATABASE_USER:root}'
      password: ${DATABASE_PASS:123456}
      hikari:
-      maximumPoolSize: 5
+      maximumPoolSize: 10
       minimumIdle: 1
       keepaliveTime: 30000
+      max-lifetime: 45000
+  jpa:
+     show-sql: ${SHOW_SQL:true}
+     hibernate:
+        ddl-auto: update
+        enable_lazy_load_no_trans: true
+     properties:
+        hibernate:
+           dialect: org.hibernate.dialect.MySQLDialect
+        
 
 server:
   port : ${PORT:8080}
@@ -34,15 +44,11 @@ rabbit:
   routing-key: ${RABBITMQ_KEY:teste_key}
   queue: ${RABBITMQ_QUEUE:teste_performance_queue}
 
-
-  jpa:
-     show-sql: ${SHOW_SQL:true}
-     hibernate:
-        ddl-auto: update
-     properties:
-        hibernate:
-           dialect: org.hibernate.dialect.MySQLDialect
    
 logging:
     level:
-      root: ${LOGGING_LEVEL:INFO}     
+      root: ${LOGGING_LEVEL:INFO}  
+      org:
+       hibernate:
+        SQL: ${LOGGING_LEVEL_HIBERNATE:INFO}   
+      
