@@ -70,7 +70,6 @@ build:
     paths:
       - example-native
   only:
-    - branches
     - tags
   except:
     - schedules
