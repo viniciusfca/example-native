@@ -71,6 +71,7 @@ build:
       - example-native
   only:
     - tags
+    - branches
   except:
     - schedules
 
