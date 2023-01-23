@@ -11,7 +11,6 @@ public class UserBusiness {
 	
 	private UserRepository repository;
 
-	
 	public User findByUser(String user) {
 		return repository.findByUserName(user);
 	}

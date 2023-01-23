@@ -11,9 +11,9 @@ spring:
         max-concurrency: ${RABBITMQ_MAX_CONCURRENCY:5}
         prefetch: ${RABBITMQ_PREFETCH:250}
   datasource:
-     url: ${JDBC_URL:jdbc:mysql://localhost:3306/rabbit?allowPublicKeyRetrieval=true&useSSL=false}
-     username: '${DATABASE_USER:root}'
-     password: ${DATABASE_PASS:123456}
+     url: ${JDBC_URL:jdbc:postgresql://localhost:5432/postgres}
+     username: '${DATABASE_USER:postgres}'
+     password: ${DATABASE_PASS:Postgres2022!}
      hikari:
       maximumPoolSize: 10
       minimumIdle: 1
@@ -26,7 +26,7 @@ spring:
         enable_lazy_load_no_trans: true
      properties:
         hibernate:
-           dialect: org.hibernate.dialect.MySQLDialect
+           dialect: org.hibernate.dialect.PostgreSQLDialect
         
 
 server:
@@ -40,7 +40,7 @@ redis:
   port: ${REDIS_PORT:6379}
   
 rabbit:
-  exchange: ${RABBITMQ_EXCHANGE:teste}
+  exchange: ${RABBITMQ_EXCHANGE:teste_performance_exchange}
   routing-key: ${RABBITMQ_KEY:teste_key}
   queue: ${RABBITMQ_QUEUE:teste_performance_queue}
 
