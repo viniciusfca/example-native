@@ -14,7 +14,7 @@ No projeto vamos usar as seguintes tecnologias:
 - [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
 - [Redis](https://redis.io/)
 - [RABBITMQMQ](https://www.RABBITMQmq.com/)
-- [Mysql 8](https://www.mysql.com/)
+- [Postgresql](https://www.postgresql.org/)
 - [GraalVM](https://www.graalvm.org/java/)
 - [SDKMan](https://sdkman.io/)
 
@@ -39,7 +39,7 @@ OpenJDK 64-Bit Server VM GraalVM 22.3.0 (build 17.0.5+8-LTS, mixed mode)
 | Nome | Descrição | Valor Padrão |
 |------|-----------|:------------:|
 PORT|Porta do socket|8080
-JDBC_URL|String connection do banco de dados|jdbc:mysql://localhost:3306/database?useSSL=false&useTimezone=true&serverTimezone=UTC
+JDBC_URL|String connection do banco de dados|jdbc:postgresql://localhost:5432/database
 DATABASE_USER|Usuário de banco de dados|root
 DATABASE_PASS|Senha de banco de dados|root
 LOGGING_LEVEL|Nível de severidade logs que devem ser apresentados no console. Veja os [possíveis valores](https://logging.apache.org/log4j/2.x/manual/customloglevels.html)|info
