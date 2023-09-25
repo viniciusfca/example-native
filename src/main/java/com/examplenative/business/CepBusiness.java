@@ -70,7 +70,7 @@ public class CepBusiness {
 
 					var cepDTO = objectMapper.readValue(response.body(), CepDTO.class);
 					cepDTO.setCep(cepDTO.getCep().replace("-", ""));
-					rabbitMQBusiness.send(cepDTO);
+					//rabbitMQBusiness.send(cepDTO);
 					
 					return ResponseEntity.status(HttpStatus.OK).body(cepDTO);
 				}

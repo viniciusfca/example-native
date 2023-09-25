@@ -34,7 +34,7 @@ public class RabbitMQBusiness {
 	@Autowired
 	private CachingConnectionFactory connect;
 
-	@RabbitListener(queues = { "${rabbit.queue:teste_performance_queue}" })
+	// @RabbitListener(queues = { "${rabbit.queue:teste_performance_queue}" })
 	public void receive(@Payload String message) throws JsonMappingException, JsonProcessingException {
 
 		var objectMapper = new ObjectMapper();
