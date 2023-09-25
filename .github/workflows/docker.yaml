@@ -27,7 +27,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: viniciusfca/quakelog:${{github.ref_name}}
+        tags: viniciusfca/example-native:${{github.ref_name}}
 
     - name: Checkout k8s repo
       uses: actions/checkout@v2
@@ -39,7 +39,7 @@ jobs:
       run: |
         cd example-native
         ls
-        sed -i 's|image:.*|image: viniciusfca/example-native:${{github.ref_name}}|' values.yaml
+        sed -i 's|tag:.*|tag: ${{github.ref_name}}|' values.yaml
 
     - name: Commit and push changes
       run: |
